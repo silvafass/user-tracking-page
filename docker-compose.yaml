@@ -1,0 +1,56 @@
+services:
+
+  db_postgress:
+    image: postgres:16.4
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-postgres-data:/var/lib/postgresql/data/pgdata
+    env_file:
+      - .env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
+      - POSTGRES_USER=${POSTGRES_USER?Variable not set}
+      - POSTGRES_DB=${POSTGRES_DB?Variable not set}
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - default
+    depends_on:
+      - db_postgress
+    environment:
+      - ADMINER_DESIGN=pepa-linha-dark
+
+  user_tracking_page:
+    build:
+      context: .
+    command: /start-reload.sh
+    restart: always
+    networks:
+      - default
+    depends_on:
+      - db_postgress
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+    volumes:
+      - .:/app
+    environment:
+      - DOMAIN=${DOMAIN}
+      - ENVIRONMENT=${ENVIRONMENT}
+      - SECRET_KEY=${SECRET_KEY?Variable not set}
+      - POSTGRES_SERVER=db_postgress
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER?Variable not set}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
+
+volumes:
+  db-postgres-data:

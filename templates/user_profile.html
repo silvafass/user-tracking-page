@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block include_head %}
+  <style>
+    .avatar {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 300px;
+      height: 300px;
+    }
+    .profile-header {
+      text-align: center;
+    }
+  </style>
+  <title>User Profile</title>
+{% endblock %}
+
+{% block header %}
+  <div class="profile-header">
+    <h1>{{ user.first_name }} {{ user.last_name }} ({{ user.username }})</h1>
+    <h2>{{ user.employment_title }} | {{ user.employment_key_skill }} </h2>
+    <h3>Contacts</h2>
+    <h4>{{ user.email }} | {{ user.phone_number }}</h3>
+  </div>
+{% endblock %}
+
+{% block content %}
+  {{ lipsum(n=10, html=True, min=550, max=600) }}
+  <img src="{{ user.avatar }}" alt="Avatar" class="avatar">
+  {{ lipsum(n=10, html=True, min=550, max=600) }}
+{% endblock %}
