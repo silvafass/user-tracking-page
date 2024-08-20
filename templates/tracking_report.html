@@ -2,12 +2,68 @@
 
 {% block include_head %}
   <title>Tracking Report</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background-color: #1e1e1e;
+    }
+    th, td {
+        border: 1px solid #333;
+        padding: 8px;
+        text-align: center;
+    }
+    th {
+        background-color: #333;
+    }
+    .center {
+      text-align: center;
+    }
+    .center table {
+      margin: auto;
+    }
+  </style>
 {% endblock %}
 
 {% block header %}
-  <h1>{% block title %} Tracking Report {% endblock %}</h1>
+  <div class="center">
+    <h1>{% block title %} Tracking Report {% endblock %}</h1>
+  </div>
 {% endblock %}
 
 {% block content %}
-  <h2>Something here is coming</h2>
+  <div class="center">
+    <h2>User Access Metrics</h2>
+    <table class="user-access-metrics">
+      <thead>
+        <tr>
+            <th>Metric Type</th>
+            <th>Description</th>
+            <th>Total</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <script>
+    fetch("{{ url_for('report') }}")
+    .then((response) => {
+      return response.json()
+    })
+    .then(({ data }) => {
+      userAccessTableBody = document.querySelector(".user-access-metrics > tbody");
+      userAccessTableBody.innerHTML = data.map(({metric_type, description, total}) => {
+        return `<tr>
+            <td>${metric_type}</td>
+            <td>${description}</td>
+            <td>${total}</td>
+        </tr>`
+      })
+      .join("");
+    });
+  </script>
 {% endblock %}

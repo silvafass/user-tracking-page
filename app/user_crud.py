@@ -1,6 +1,6 @@
 from sqlmodel import Session, col, select
 
-from app.domains.models import User
+from app.models import User
 
 
 def save(data: dict, session: Session):

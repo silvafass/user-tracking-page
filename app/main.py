@@ -10,6 +10,7 @@ from starlette.middleware.sessions import SessionMiddleware
 
 from app.dependencies import SessionUserDep, engine
 from app.settings import settings
+from app.user_tracking_api.main import api_router
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s %(levelname)s - %(message)s"
@@ -44,3 +45,6 @@ async def tracking_report(request: Request):
     return templates.TemplateResponse(
         request=request, name="tracking_report.html"
     )
+
+
+app.include_router(api_router, prefix=settings.api_v1_str)

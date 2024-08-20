@@ -6,8 +6,8 @@ from fastapi import Depends, Request
 from sqlalchemy import Engine
 from sqlmodel import Session, create_engine
 
-from app.domains import user_crud
-from app.domains.models import User
+from app import user_crud
+from app.models import User
 from app.settings import settings
 
 logger = logging.getLogger(__name__)
